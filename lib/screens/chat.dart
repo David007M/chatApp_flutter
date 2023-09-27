@@ -1,10 +1,33 @@
 import 'package:chat_app/widgets/chat_messages.dart';
 import 'package:chat_app/widgets/new_message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
+
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  void setupPushNotifications() async {
+    final fcm = FirebaseMessaging.instance;
+
+    await fcm.requestPermission(); // get permission first from the user.
+    final token = await fcm
+        .getToken(); // to obtain the address of the device in which the app is running.
+
+    print(token);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    setupPushNotifications();
+  }
 
   @override
   Widget build(BuildContext context) {
